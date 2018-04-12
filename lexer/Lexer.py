@@ -7,6 +7,9 @@ from TokenModule import Token
 import re
 
 WHITESPACE = 'whitespace'
+BEGIN_COMMENT_BLOCK = 'BEGIN_COMMENT_BLOCK'
+END_COMMENT_BLOCK = 'END_COMMENT_BLOCK'
+COMMENT_LINE = 'COMMENT_LINE'
 
 class Lexer(object):
     '''
@@ -23,6 +26,9 @@ class Lexer(object):
         token_specification = [(WHITESPACE, r'\s+'),
                                (Token.TYPE_STRING_LITERAL, r'".*"'),
                                (Token.TYPE_ID, r'[A-Za-z][A-Za-z0-9_]*'),
+                               (BEGIN_COMMENT_BLOCK, r'\/\*'),
+                               (END_COMMENT_BLOCK, r'\*\/'),
+                               (COMMENT_LINE, r'\/\/.*'),
                                (Token.TYPE_ARIT_OP, r'\+|-|\*|/'),
                                #(Token.TYPE_FLOAT, r'\d+\.\d+'),
                                (Token.TYPE_NUM, r'\d+(\.\d+)?'),
@@ -34,28 +40,37 @@ class Lexer(object):
                                (Token.TYPE_COMMA, r','),
                                (Token.TYPE_SEMICOLON, r';'),
                                (Token.TYPE_RELATIONAL_OP, r'<|<=|==|!=|>=|>'),
-                               (Token.TYPE_LOGICAL_OP, r'\|\||&&')
+                               (Token.TYPE_LOGICAL_OP, r'\|\||&&'),
+
                                ]
         
         self.tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
     
     def evaluate(self):
         line_num = 0
+        is_comment = False
         for line in text:
             for mo in re.finditer(self.tok_regex, line):
                 kind = mo.lastgroup
                 value = mo.group(kind)
-                if (kind != WHITESPACE):
+                if (kind == BEGIN_COMMENT_BLOCK):
+                    is_comment = True
+                if (kind != WHITESPACE and is_comment == False and kind != COMMENT_LINE):
                     if (kind == Token.TYPE_ID and value in self.keywords):
                         kind = Token.TYPE_RESERVED_WORD
                     self.tokens.append(Token(kind, value, line_num, mo.start()))
+                if (kind == END_COMMENT_BLOCK):
+                    is_comment = False
             line_num += 1
     def printTokens(self):
         for t in self.tokens:
             print(t)
 
 if __name__ == "__main__":
-    text = ['6 + 1', '1.1 * 1221', 'void main1_221()', 'idfadsf = "literal - ?  / <> _ sdf";']
+    with open('entrada.txt','r') as f:
+        text = f.readlines()
+        text = [l.strip() for l in text]
+        
     lexer = Lexer(text)
     lexer.evaluate()
     lexer.printTokens()

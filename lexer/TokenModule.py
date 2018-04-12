@@ -24,7 +24,6 @@ class Token(object):
     TYPE_COMMA = 'COMMA'
     TYPE_SEMICOLON = 'SEMICOLON'
 
-
     def __init__(self, token_type, value, line = 0, position = 0):
         self.token_type = token_type
         self.value = value
