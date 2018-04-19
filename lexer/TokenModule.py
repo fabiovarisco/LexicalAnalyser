@@ -23,6 +23,7 @@ class Token(object):
     TYPE_EQUAL = 'EQUAL'
     TYPE_COMMA = 'COMMA'
     TYPE_SEMICOLON = 'SEMICOLON'
+    TYPE_INCLUDE = 'INCLUDE'
 
     def __init__(self, token_type, value, line = 0, position = 0):
         self.token_type = token_type

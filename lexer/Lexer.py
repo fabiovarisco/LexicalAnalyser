@@ -41,6 +41,7 @@ class Lexer(object):
                                (Token.TYPE_SEMICOLON, r';'),
                                (Token.TYPE_RELATIONAL_OP, r'<|<=|==|!=|>=|>'),
                                (Token.TYPE_LOGICAL_OP, r'\|\||&&'),
+                               (Token.TYPE_INCLUDE, r'((?i)\#include).*'),
 
                                ]
         
