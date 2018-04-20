@@ -1,7 +1,5 @@
 '''
-Created on 22 de mar de 2018
-
-@author: I844141
+@author: FABIO VARISCO, GABRIEL RECH
 '''
 from TokenModule import Token
 import re
@@ -10,6 +8,15 @@ WHITESPACE = 'whitespace'
 BEGIN_COMMENT_BLOCK = 'BEGIN_COMMENT_BLOCK'
 END_COMMENT_BLOCK = 'END_COMMENT_BLOCK'
 COMMENT_LINE = 'COMMENT_LINE'
+
+class SyntaxErr(Exception):
+    def __init__(self, line, col, value):
+        self.line = line
+        self.col = col
+        self.value = value
+        
+    def __str__(self):
+        return repr('Incorrect syntax detected at: Line: {}; Column: {}; Value: {}.'.format(self.line, self.col, self.value))
 
 class Lexer(object):
     '''
@@ -36,13 +43,15 @@ class Lexer(object):
                                (Token.TYPE_PAREN_R, r'\)'),
                                (Token.TYPE_BRACKET_L, r'\{'),
                                (Token.TYPE_BRACKET_R, r'\}'),
+                               (Token.TYPE_SQ_BRACKET_L, r'\['),
+                               (Token.TYPE_SQ_BRACKET_R, r'\]'),
                                (Token.TYPE_EQUAL, r'='),
                                (Token.TYPE_COMMA, r','),
                                (Token.TYPE_SEMICOLON, r';'),
                                (Token.TYPE_RELATIONAL_OP, r'<|<=|==|!=|>=|>'),
                                (Token.TYPE_LOGICAL_OP, r'\|\||&&'),
                                (Token.TYPE_INCLUDE, r'((?i)\#include).*'),
-
+                               (Token.TYPE_POINTER_IDENTIFIER, r'(\*+)|&')
                                ]
         
         self.tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
@@ -51,7 +60,12 @@ class Lexer(object):
         line_num = 0
         is_comment = False
         for line in text:
+            last_col = 0
             for mo in re.finditer(self.tok_regex, line):
+                
+                if (not is_comment and mo.start() - last_col > 0):
+                    raise SyntaxErr(line_num + 1, last_col, line[last_col:mo.start()])
+                last_col = mo.end()
                 kind = mo.lastgroup
                 value = mo.group(kind)
                 if (kind == BEGIN_COMMENT_BLOCK):

@@ -1,7 +1,5 @@
 '''
-Created on 22 de mar de 2018
-
-@author: I844141
+@author: FABIO VARISCO, GABRIEL RECH
 '''
 
 class Token(object):
@@ -20,10 +18,13 @@ class Token(object):
     TYPE_PAREN_R = 'R_PAREN'
     TYPE_BRACKET_L = 'L_BRACKET'
     TYPE_BRACKET_R = 'R_BRACKET'
+    TYPE_SQ_BRACKET_L ='L_SQ_BRACKET'
+    TYPE_SQ_BRACKET_R ='R_SQ_BRACKET'
     TYPE_EQUAL = 'EQUAL'
     TYPE_COMMA = 'COMMA'
     TYPE_SEMICOLON = 'SEMICOLON'
     TYPE_INCLUDE = 'INCLUDE'
+    TYPE_POINTER_IDENTIFIER ='POINTER_IDENTIFIER'
 
     def __init__(self, token_type, value, line = 0, position = 0):
         self.token_type = token_type

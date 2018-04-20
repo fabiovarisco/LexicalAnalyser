@@ -1,5 +1,7 @@
 # Analisador Léxico
 
+## Alunos: Fabio Varisco, Gabriel Rech
+
 Dica: Utilizar Eclipse com plugin PyDev. 
 
 Recursos: 

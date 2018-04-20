@@ -10,13 +10,15 @@ void CalculoMedia()
     NotaDaP1 = 6.6;  // Atribuição do Valores das médias 
     NotaDaP2 = 8.2; 
      
-    Media = (NotaDaP1 + NotaDaP2) / 2.0; 
      
-    printf("Média Final : %6.3f", Media); 
-    /* No momento da execução sinal %6.3f vai ser substituído 
+    Media = (NotaDaP1 + NotaDaP2) / 2.0;
+
+    printf("Media Final: %6.3f", Media);   
+    /* No momento da execucao sinal %6.3f vai ser substituido 
     pelo valor da variável Media 
     Média Final:  7.400 */ 
     getch(); // Espera que o usuário pressione uma tecla 
+    
 } 
  
 int VerificaNumero() 
@@ -25,7 +27,7 @@ int VerificaNumero()
     string s; 
      
     printf ("Digite um número: "); 
-    scanf ("%d",&num); 
+    scanf ("%d", &num); 
      
     if (num>10) 
     { 
@@ -63,7 +65,7 @@ void AlterarVetor(int * vetor, int elementos)
     } 
 } 
  
-int main() 
+int main()
 { 
     int v[] = {5, 10, 15, 3, 10, 76, 5, 13, 33, 45}; 
     int * pt; 
